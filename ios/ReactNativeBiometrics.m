@@ -173,6 +173,7 @@ RCT_EXPORT_METHOD(simplePrompt: (NSDictionary *)params resolver:(RCTPromiseResol
   dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSString *promptMessage = [RCTConvert NSString:params[@"promptMessage"]];
     NSString *fallbackPromptMessage = [RCTConvert NSString:params[@"fallbackPromptMessage"]];
+    NSString *cancelButtonText = [RCTConvert NSString:params[@"cancelButtonText"]];
     BOOL allowDeviceCredentials = [RCTConvert BOOL:params[@"allowDeviceCredentials"]];
 
     LAContext *context = [[LAContext alloc] init];
@@ -183,6 +184,10 @@ RCT_EXPORT_METHOD(simplePrompt: (NSDictionary *)params resolver:(RCTPromiseResol
       context.localizedFallbackTitle = fallbackPromptMessage;
     } else {
       context.localizedFallbackTitle = @"";
+    }
+
+    if (cancelButtonText != nil && [cancelButtonText length] != 0) {
+      context.localizedCancelTitle = cancelButtonText;
     }
 
     [context evaluatePolicy:laPolicy localizedReason:promptMessage reply:^(BOOL success, NSError *biometricError) {

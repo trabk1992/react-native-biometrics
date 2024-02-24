@@ -23,6 +23,11 @@ public class SimplePromptCallback extends BiometricPrompt.AuthenticationCallback
             resultMap.putBoolean("success", false);
             resultMap.putString("error", "User cancellation");
             this.promise.resolve(resultMap);
+        } else if (errorCode == BiometricPrompt.ERROR_LOCKOUT || errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT) {
+            WritableMap resultMap = new WritableNativeMap();
+            resultMap.putBoolean("success", false);
+            resultMap.putString("error", "Error lockout");
+            this.promise.resolve(resultMap);
         } else {
             this.promise.reject(errString.toString(), errString.toString());
         }
